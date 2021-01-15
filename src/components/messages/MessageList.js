@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput } from 'react-native';
 import { View } from 'react-native';
-import { Avatar } from 'react-native-elements';
+import { Avatar, Card } from 'react-native-elements';
+import { colors } from '../../assets/styles/_color';
+import MessageItem from './MessageItem';
 
 const MessageList = ({messages, room, pushMessage}) => {
 
   const [text, setText] = useState('');
-    const [chat, setChat] = useState('');
     //const [user, setUser] = useState(null);
 
 
@@ -19,47 +20,38 @@ const MessageList = ({messages, room, pushMessage}) => {
     };
     const disableButton = isMessageEmpty(text);
 
-    const handleChange = (e) => {
+    const handleChange = (text) => {
         setText(text)
     }
     const handleSubmit=(e)=>{
         e.preventDefault();
         !disableButton && 
         pushMessage(text);
-        setChat(chat => [...chat,text]);
         !disableButton && setText('');
     }
 
-
+    console.log('text is', messages);
     return (
-        <View className="messageList">
-            {messages.map((message, id) => {
+          <View style={styles.view}>
+            <View style={styles.cardConainer}>
+            {messages.map((message, id)=> {
                 return (
-                    <>
-                    <View style={styles.chatView}>
-                        <Text style={styles.textColor} key={id}>{message} good</Text>
-                      </View>
-                      <View>
-                      { user.avatar ? 
-                          <Avatar rounded size="medium" source={user.avatar} /> :
-                          <Avatar rounded size="medium" title={user.name.slice(0,2)} overlayContainerStyle={{backgroundColor: '#3f51b5'}}/>
-                          }
-                      </View>
-                    </>
+                    <MessageItem message={message} id={id} user={user} key={id}/>
                 )
             })}
+            </View>
             <View>
-                        <TextInput
-                          placeholder="Enter Text Here"
-                          onSubmitEditing={handleSubmit}
-                          onChangeText={handleChange}
-                          style={styles.input}
-                          />
-                      </View>
-                      <View>
-                        <Text>{text} is ok</Text>
-                      </View>
-        </View>
+              <TextInput
+                placeholder="Enter Text Here"
+                onSubmitEditing={handleSubmit}
+                onChangeText={handleChange}
+                style={styles.input}
+                value={text}
+                placeholderTextColor={`${colors.white}`}
+                />
+            </View>
+          </View>
+            
     )
 }
 
@@ -67,17 +59,25 @@ const MessageList = ({messages, room, pushMessage}) => {
 export default MessageList;
 
 const styles = StyleSheet.create({
-    chatView: {
-      backgroundColor: '#3da1d7',
-      color: '#fff',
+    view: {
+      flex: 1, 
+      paddingLeft : 10,
+      paddingRight : 10,
+      paddingTop: 10,
+      backgroundColor: `${colors.gray}`
+    },
+    cardConainer: {
+      flex: 1,
+    },
+    input: {
+      height: 40, 
+      borderColor: `${colors.blue}`, 
+      borderWidth: 1, 
       borderRadius: 10,
-      padding:10,
-      width: '70%'
-    },  
-    textColor: {
-      color: '#fff'
+      backgroundColor: `${colors.skyblue}`,
+      fontWeight:"700",
+      color: `${colors.white}`
     }
-
   });
 
   const user = {

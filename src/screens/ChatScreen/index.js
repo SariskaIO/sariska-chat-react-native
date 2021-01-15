@@ -14,7 +14,6 @@ const index = () => {
   const [user, setUser] = useState({});
   const [room, setRoom] = useState({});
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
 
   const chatChannel = CreateChannel('chat:room123', {});
 
@@ -22,13 +21,19 @@ const index = () => {
        const {room, user}  = response;
        setUser(user);
        setRoom(room);
+       localStorage.setItem("user",JSON.stringify({id : user.id, name: user.name}));
+       localStorage.setItem("room",JSON.stringify({session_id : room.session_id, created_by: room.created_by, inserted_at: room.inserted_at}));
   });
 
+//console.log('usersed are: ', JSON.parse(localStorage.getItem("user")) || 'hello');
+
   UseEventHandler(chatChannel, 'new_message', message => {
+      console.log('newMessage', message);
       setMessages(messages => [...messages, message])
   });
 
   UseEventHandler(chatChannel, 'archived_message', message => {
+       console.log('archived', message)
       setMessages(messages => [message, ...messages])
   });
 
@@ -37,13 +42,14 @@ const index = () => {
      console.log('total archived message count', count);
   });
 
-  
   const pushMessage = (message)=>{
-    console.log('channel', chatChannel);
+      console.log('channel', chatChannel);
       setMessages(messages => [...messages, message]);
-      chatChannel.push({content: message});
+      chatChannel.push('new_message', {content: message});
       console.log('channel', chatChannel);
   };
+  console.log('room new', room);
+
     return (
         <>
             <SafeAreaView style={{flex:1}}>
