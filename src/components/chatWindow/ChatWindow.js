@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, TextInput } from 'react-native'
 import MessageList from '../messages/MessageList'
 
@@ -11,21 +11,14 @@ const ChatWindow = ({messages, pushMessage, user, room}) => {
     //     //setRoom(roomDetails);
     // },[])
 
-    const scrollRef = useRef(null);
-    // const scrollToBottom = () => {
-    //     scrollRef.current.scrollIntoView({ behavior: 'smooth' })
-    //   }
-    // useEffect(()=>{
-    //     scrollToBottom();
-    // },[text])g
-
+    
     console.log('userDetails are', user);
     
 
     console.log('room is', room);
     return (
            <View style={styles.view}>
-             <Text style={styles.text}>Hey! Gurudeep</Text>
+             <Text style={styles.text}>Hey! <Text style={styles.name}>{user.name}</Text></Text>
              <View style={styles.chatBox}>
                 <MessageList messages={messages} user={user} pushMessage={pushMessage} room={room}/>
             </View>
@@ -44,11 +37,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10
     },  
+    name: {
+      fontWeight: '700'
+    },  
     chatBox: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-around',
-      marginVertical: 5,
+      marginTop: 5,
       flex: 1
     },
     

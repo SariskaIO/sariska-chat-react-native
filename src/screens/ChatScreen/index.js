@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, Button } from 'react-native';
-import { Avatar, ListItem } from 'react-native-elements';
-import user from '../../assets/images/user.png';
-import { TextInput } from 'react-native';
-import MessageList from '../../components/messages/MessageList';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import CreateChannel from '../../api/channel/CreateChannel';
 import UseEventHandler from '../../api/channel/UseEventHandler';
 import ChatWindow from '../../components/chatWindow/ChatWindow';
+import { colors } from '../../assets/styles/_color';
 
 
   
-const index = () => {
+const index = ({navigation: {setParams}}) => {
   const [user, setUser] = useState({});
   const [room, setRoom] = useState({});
   const [messages, setMessages] = useState([]);
@@ -21,8 +18,21 @@ const index = () => {
        const {room, user}  = response;
        setUser(user);
        setRoom(room);
-       localStorage.setItem("user",JSON.stringify({id : user.id, name: user.name}));
-       localStorage.setItem("room",JSON.stringify({session_id : room.session_id, created_by: room.created_by, inserted_at: room.inserted_at}));
+       const storeData = async (value) => {
+        try {
+          const jsonValue = JSON.stringify(value)
+          await AsyncStorage.setItem('user', jsonValue)
+        } catch (e) {
+          // saving error
+        }
+      }
+      storeData({id : user.id, name: user.name});
+      setParams({
+        session_id: room.session_id,
+        name: user.name
+      })
+       //localStorage.setItem("user",JSON.stringify({id : user.id, name: user.name}));
+       //localStorage.setItem("room",JSON.stringify({session_id : room.session_id, created_by: room.created_by, inserted_at: room.inserted_at}));
   });
 
 //console.log('usersed are: ', JSON.parse(localStorage.getItem("user")) || 'hello');
@@ -53,26 +63,11 @@ const index = () => {
     return (
         <>
             <SafeAreaView style={{flex:1}}>
-              <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                contentContainerStyle={styles.scrollContainer}
+              <View
+                style={styles.scrollContainer}
                 >
                   <ChatWindow messages={messages} pushMessage={pushMessage} user={user} room={room}/>
-                      {/* {
-                    UserList.map((l, i) => (
-                        <ListItem key={i}>
-                            { l.avatar ? 
-                          <Avatar rounded size="medium" source={l.avatar} /> :
-                          <Avatar rounded size="medium" title={l.title} overlayContainerStyle={{backgroundColor: '#3f51b5'}}/>
-                          }
-                          <ListItem.Content>
-                            <ListItem.Title>{l.lastMessage}</ListItem.Title>
-                          </ListItem.Content>
-                          <Text>{l.sentAt}</Text>
-                        </ListItem>
-                      ))
-                        } */}
-                </ScrollView>
+                </View>
             </SafeAreaView>
         </>
     )
@@ -81,32 +76,10 @@ const index = () => {
 export default index;
 
 const styles = StyleSheet.create({
-    chatBox: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-around',
-      marginVertical: 5
-    },
     scrollContainer: {
       paddingBottom:0,
-      backgroundColor: '#ededed',
+      backgroundColor: `${colors.gray1}`,
       flex:1,
       justifyContent: 'space-between',
-    },
-    input: {
-      height: 40, 
-      borderColor: 'gray', 
-      borderWidth: 1, 
-      borderRadius: 10
     }
-
   });
-
-  export const UserList = {
-        id: 1, 
-        avatar: user,
-        title: '',
-        lastMessage: 'Hello Guru',
-        sentAt: '9:45pm'
-    }
-    

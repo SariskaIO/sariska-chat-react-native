@@ -1,14 +1,13 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput } from 'react-native';
+import React, { useRef, useState } from 'react'
+import { FlatList, SafeAreaView, StyleSheet, TextInput } from 'react-native';
 import { View } from 'react-native';
-import { Avatar, Card } from 'react-native-elements';
+import { ScrollView } from 'react-native-gesture-handler';
 import { colors } from '../../assets/styles/_color';
 import MessageItem from './MessageItem';
 
-const MessageList = ({messages, room, pushMessage}) => {
+const MessageList = ({messages, room, pushMessage, user}) => {
 
   const [text, setText] = useState('');
-    //const [user, setUser] = useState(null);
 
 
     const isMessageEmpty = (text) => {
@@ -29,18 +28,20 @@ const MessageList = ({messages, room, pushMessage}) => {
         pushMessage(text);
         !disableButton && setText('');
     }
+    const scrollRef = useRef(null);
 
     console.log('text is', messages);
     return (
           <View style={styles.view}>
-            <View style={styles.cardConainer}>
-            {messages.map((message, id)=> {
-                return (
-                    <MessageItem message={message} id={id} user={user} key={id}/>
-                )
-            })}
-            </View>
-            <View>
+            <FlatList 
+              data={messages}
+              renderItem={({item})=><MessageItem message={item} user={user}/>}
+              keyExtractor={(item)=> item.id + Math.floor(Math.random()*100).toString()}
+              ref={scrollRef}
+              onContentSizeChange={() => scrollRef.current.scrollToEnd({animated: true})}
+              style={styles.cardConainer} 
+              />
+            <View style={styles.viewInput}>
               <TextInput
                 placeholder="Enter Text Here"
                 onSubmitEditing={handleSubmit}
@@ -61,25 +62,30 @@ export default MessageList;
 const styles = StyleSheet.create({
     view: {
       flex: 1, 
-      paddingLeft : 10,
-      paddingRight : 10,
       paddingTop: 10,
-      backgroundColor: `${colors.gray}`
+      backgroundColor: `${colors.gray}`,
+      paddingBottom: 0
     },
     cardConainer: {
       flex: 1,
+      paddingLeft : 10,
+      paddingRight : 10,
+    },
+    viewInput:{
+      width: '100%',
+      elevation: 10,
+      height: 60,
+      backgroundColor: '#fff',
+      justifyContent: 'flex-end'
     },
     input: {
-      height: 40, 
+      height: 55, 
       borderColor: `${colors.blue}`, 
       borderWidth: 1, 
-      borderRadius: 10,
-      backgroundColor: `${colors.skyblue}`,
+      borderRadius: 1,
+      backgroundColor: `#454545`,
       fontWeight:"700",
-      color: `${colors.white}`
+      color: `${colors.white}`,
+      paddingLeft: 10
     }
   });
-
-  const user = {
-    name: 'gurudeep'
-  }

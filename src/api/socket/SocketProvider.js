@@ -10,12 +10,12 @@ const SocketProvider = ({children}) => {
         const fetchData = async ()=> {
             console.log('socket', socket);
             const token = await getToken();
-
             console.log('token', token);
-            const s = new Socket(WEB_SOCKET_URL, {token});
+            const params = {token};
+            const s = new Socket(WEB_SOCKET_URL, {params});
             s.onOpen( () => console.log("connection open!") )
-            // s.onError( () => console.log("there was an error with the connection!") )
-            // s.onClose( () => console.log("the connection dropped") )
+            s.onError( () => console.log("there was an error with the connection!") )
+            s.onClose( () => console.log("the connection dropped") )
             s.connect();
             setSocket(s);
         }

@@ -1,17 +1,16 @@
 
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native'
-import { Avatar } from 'react-native-elements';
 import { colors } from '../../assets/styles/_color';
 
 
-const MessageItem = ({user, message, id}) => {
+const MessageItem = ({user, message}) => {
     return (
         <View style={styles.view} >
             <Text style={styles.avatar}>
-                G
+                {user.name.toUpperCase().slice(0,1)}
             </Text>
-            <Text key={id} style={styles.message}>
+            <Text style={styles.message}>
                 {message.content || message}
             </Text>
         </View>
