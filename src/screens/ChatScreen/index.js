@@ -31,11 +31,7 @@ const index = ({navigation: {setParams}}) => {
         session_id: room.session_id,
         name: user.name
       })
-       //localStorage.setItem("user",JSON.stringify({id : user.id, name: user.name}));
-       //localStorage.setItem("room",JSON.stringify({session_id : room.session_id, created_by: room.created_by, inserted_at: room.inserted_at}));
   });
-
-//console.log('usersed are: ', JSON.parse(localStorage.getItem("user")) || 'hello');
 
   UseEventHandler(chatChannel, 'new_message', message => {
       console.log('newMessage', message);
@@ -53,13 +49,9 @@ const index = ({navigation: {setParams}}) => {
   });
 
   const pushMessage = (message)=>{
-      console.log('channel', chatChannel);
       setMessages(messages => [...messages, message]);
       chatChannel.push('new_message', {content: message});
-      console.log('channel', chatChannel);
   };
-  console.log('room new', room);
-
     return (
         <>
             <SafeAreaView style={{flex:1}}>
