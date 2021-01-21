@@ -1,4 +1,4 @@
-# sariska-chat-react-This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
+This project was bootstrapped with [Create React Native App](https://github.com/react-community/create-react-native-app).
 
 Below you'll find information about performing common tasks. The most recent version of this guide is available [here](https://github.com/react-community/create-react-native-app/blob/master/react-native-scripts/template/README.md).
 
@@ -101,4 +101,3 @@ If you have made use of Expo APIs while working on your project, then those API 
 ## Tips and Tricks
 
 * If you have a local network the prevents your phone from accessing the address that is printed when running the packager, you can often work around this issue by "tethering" your computer to your phone's internet connection. Some phones call this feature "mobile hotspot." While it's very convenient, if you have a data plan where you pay for data transfer you should be careful when using this feature, especially when installing dependencies from NPM.
-native
